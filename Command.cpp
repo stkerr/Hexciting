@@ -164,64 +164,64 @@ void Command::printOperation()
 
 	for(int i = 0; i < length; i++)
 	{
-            // new row, so print out the old data
-            if(i % 0x10 == 0&& i != 0)
-            {
-                // print a row header
-                printf("%#x:\t", currentAddress);
-                currentAddress += 0x10;
-                
-                // print our hex data
-                for(int j = 0; j < numberCharsToPrint; j++)
-                    printf("%02x ", hexBuffer[j]);
-                for(int j = 0; j < numberCharsToPrint; j++)
-                {
-                    if(checkCharacterBounds(hexBuffer[j]))
-                        printf("%c", hexBuffer[j]);
-                    else
-                        printf(".");
-                }
-
-                printf("\n");
-                numberCharsToPrint = 0;
-
-                hasData = false;
-            }
-            
-            
-            hexBuffer[i % 0x10] = dataBuffer[i];
-            numberCharsToPrint++;
-            hasData = true;
-
-	}
-        
-        // print any overflow data
-        if(hasData == true)
+        // new row, so print out the old data
+        if(i % 0x10 == 0 && i != 0)
         {
-             // print a row header
+            // print a row header
             printf("%#x:\t", currentAddress);
             currentAddress += 0x10;
-
+            
             // print our hex data
-            for(int j = 0; j < 0x10; j++)
+            for(int j = 0; j < numberCharsToPrint; j++)
+                printf("%02x ", hexBuffer[j]);
+            printf("\t");
+            for(int j = 0; j < numberCharsToPrint; j++)
             {
-                if(j < numberCharsToPrint)
-                    printf("%02x ", hexBuffer[j]);
-                else
-                    printf("   ");
-            }
-
-            for(int j = 0; j < 0x10; j++)
-            {
-                if(j < numberCharsToPrint)
+                if(checkCharacterBounds(hexBuffer[j]))
                     printf("%c", hexBuffer[j]);
                 else
-                    printf("   ");
+                    printf(".");
             }
 
             printf("\n");
+            numberCharsToPrint = 0;
 
+            hasData = false;
         }
+            
+            
+        hexBuffer[i % 0x10] = dataBuffer[i];
+        numberCharsToPrint++;
+        hasData = true;
+
+	}
+        
+    // print any overflow data
+    if(hasData == true)
+    {
+         // print a row header
+        printf("%#x:\t", currentAddress);
+        currentAddress += 0x10;
+
+        for(int j = 0; j < 0x10; j++)
+        {
+            if(j < numberCharsToPrint)
+                printf("%02x ", hexBuffer[j]);
+            else
+                printf("   ");
+        }
+        printf("\t");
+        for(int j = 0; j < numberCharsToPrint; j++)
+        {
+            if(checkCharacterBounds(hexBuffer[j]))
+                printf("%c", hexBuffer[j]);
+            else
+                printf(".");
+        }
+
+        printf("\n");
+
+    }
 }
 
 void Command::writeOperation()
